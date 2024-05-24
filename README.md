@@ -19,12 +19,12 @@ This documentation highlights the steps that I took to setup VLANs on my home ne
 
 ##VLAN Configuration Plan
 
-###VLANs to Create
+### VLANs to Create
   -**VLAN 10:** Trusted Devices (Desktop, MacBook Air)
   -**VLAN 20:** Servers (UNRAID, iLO 4)
   -**VLAN 30:** IoT Devics (iPhone, Amazon Echo Dot)
 
-##Step-by-Step Configuration
+## Step-by-Step Configuration
 
 ### 1. OPNSense Router Configuration
 

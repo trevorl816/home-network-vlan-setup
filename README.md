@@ -17,7 +17,7 @@ This documentation highlights the steps that I took to setup VLANs on my home ne
   -MacBook Air
   -Amazon Echo Dot
 
-##VLAN Configuration Plan
+## VLAN Configuration Plan
 
 ### VLANs to Create
   -**VLAN 10:** Trusted Devices (Desktop, MacBook Air)

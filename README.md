@@ -3,16 +3,16 @@
 This documentation highlights the steps that I took to setup VLANs on my home network to segment different types of devices for improved security and management. The setup will include a OPNsense router, a Netgear GS108E V3 managed switch, and a TP-Link Archer AX1500 router running in AP mode.
 
 ## Equipment
-  -**OPNSense Router**
-  -**Netgear GS108E V3 Managed Switch**
-  -**TP-Link Archer AX1500 Router running in AP mode since I don't own proper AP**
+  - **OPNSense Router**
+  - **Netgear GS108E V3 Managed Switch**
+  - **TP-Link Archer AX1500 Router running in AP mode since I don't own proper AP**
 
 ## Devices
--**Desktop computer** connected to port 1 on the switch via ethernet
--**HPE Proliant DL360P G8 Server running UNRAID OS**
+- **Desktop computer** connected to port 1 on the switch via ethernet
+- **HPE Proliant DL360P G8 Server running UNRAID OS**
 -UNRAID connected to port 2 on the switch via ethernet
 -iLO 4 connected to port 3 on the switch via ethernet
--**Wireless Devices:**
+- **Wireless Devices:**
   -iPhone
   -MacBook Air
   -Amazon Echo Dot
@@ -20,9 +20,9 @@ This documentation highlights the steps that I took to setup VLANs on my home ne
 ## VLAN Configuration Plan
 
 ### VLANs to Create
-  -**VLAN 10:** Trusted Devices (Desktop, MacBook Air)
-  -**VLAN 20:** Servers (UNRAID, iLO 4)
-  -**VLAN 30:** IoT Devics (iPhone, Amazon Echo Dot)
+  - **VLAN 10:** Trusted Devices (Desktop, MacBook Air)
+  - **VLAN 20:** Servers (UNRAID, iLO 4)
+  - **VLAN 30:** IoT Devics (iPhone, Amazon Echo Dot)
 
 ## Step-by-Step Configuration
 

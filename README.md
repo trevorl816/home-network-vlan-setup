@@ -63,4 +63,14 @@ This documentation highlights the steps that I took to setup VLANs on my home ne
   ### 2. Netgear GS108E V3 Switch Configuration
 
   **Access the Switch Configuration:**
-    1. Connect your PC to the switch and access the Web UI using its IP address (in my case, I had to factory reset it and set my computer to have a manual IP 
+    1. Connect your PC to the switch and access the Web UI using its IP address (in my case, I had to factory reset it and set my computer to have a manual IP of `192.168.0.219` with subnet mask of `255.255.255.0`. in order to access the WebUI, you have to enter the ip address of `192.168.0.239`).
+
+  **Create VLANS:**
+    1. Go to **Switching > VLAN > VLAN Configurations**.
+    2. Add VLAN 10, VLAN 20, and VLAN 30.
+
+  **Assign VLANs to Ports:**
+    1. Go to **Switching > VLAN > VLAN Membership**.
+    2. Configure ports: 
+      - **Port 1 (Desktop):** Untagged for VLAN 20 (Server) .
+      - **Port 2 (UNRAID):** Un

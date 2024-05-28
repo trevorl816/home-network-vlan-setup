@@ -28,7 +28,7 @@ Step 1: Configure VLANs on OPNsense
 
 Access OPNsense GUI
 
-	1.	Open your web browser and go to the WebUI - in my case, it is set to `192.168.0.1` - default is `192.168.0.1`
+	1.	Open your web browser and go to the WebUI - in my case, it is set to `192.168.0.1` - default is `192.168.1.1`
 	2.	Log in with the username and password - default is root/opnsense - it is advised that you change the default credentials due to safety concerns.
 
 Add VLANs

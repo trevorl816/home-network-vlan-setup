@@ -92,14 +92,14 @@ Configure Firewall Rules
 	1.	Navigate to Firewall > Rules.
 	2.	Select each VLAN interface and create rules as needed:
 	•	For obtaining basic network connectivity do the following: 
- 		**Action:** Pass
-   		**Disabled:** Uncheck this
-     		**Interface:** Select Proper VLAN (VLAN 10 / Management)
-       		**TCP/IP Version:** Select IPv4 (or IPv6 if you're using IPv6)
-	 	**Protocol:** I set mine to any
-		**Source:** Mangement net
-  		**Destination:** Leave blank to let all outbound access through
-    		**Destination port range:** I left it blank for all ports so I can have outbound network access.
+ 		Action: Pass
+   		Disabled: Uncheck this
+     		Interface: Select Proper VLAN (VLAN 10 / Management)
+       		TCP/IP Version: Select IPv4 (or IPv6 if you're using IPv6)
+	 	Protocol: I set mine to any
+		Source: Mangement net
+  		Destination: Leave blank to let all outbound access through
+    		Destination port range: I left it blank for all ports so I can have outbound network access.
 	•	Rinse and repeat the same rule set for all 5 VLANS. 
 
 Step 2: Configure VLANs on Netgear GS108E V3 Switch

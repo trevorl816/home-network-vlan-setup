@@ -28,8 +28,8 @@ Step 1: Configure VLANs on OPNsense
 
 Access OPNsense GUI
 
-	1.	Open a web browser and navigate to your OPNsense router’s IP address (default is usually 192.168.1.1).
-	2.	Log in with your admin username and password.
+	1.	Open your web browser and go to the WebUI - in my case, it is set to `192.168.0.1` - default is `192.168.0.1`
+	2.	Log in with the username and password - default is root/opnsense - it is advised that you change the default credentials due to safety concerns.
 
 Add VLANs
 
@@ -39,7 +39,7 @@ Add VLANs
 
 VLAN ID	Description	Parent Interface
 10	Management	LAN
-20	Servers	LAN
+20	Servers		LAN
 30	Trusted Devices	LAN
 40	IoT Devices	LAN
 50	Guest WiFi	LAN
@@ -49,8 +49,8 @@ VLAN ID	Description	Parent Interface
 Assign Interfaces
 
 	1.	Navigate to Interfaces > Assignments.
-	2.	You will see the newly created VLAN interfaces. Click the + button to assign each VLAN.
-	3.	Configure each VLAN interface:
+	2.	Click the + button to assign VLANS
+	3.	Configure each VLAN interface with the following settings:
 	•	Enable the interface.
 	•	IPv4 Configuration Type: Static IPv4
 	•	IP Address:
@@ -68,31 +68,39 @@ Configure DHCP for VLANs
 	•	VLAN 10:
 	•	Interface: VLAN 10
 	•	Enable DHCP Server
-	•	Range: 192.168.10.10 to 192.168.10.100
+	•	Range: 192.168.10.10 to 192.168.10.50
 	•	VLAN 20:
 	•	Interface: VLAN 20
 	•	Enable DHCP Server
-	•	Range: 192.168.20.10 to 192.168.20.100
+	•	Range: 192.168.20.10 to 192.168.20.50
 	•	VLAN 30:
 	•	Interface: VLAN 30
 	•	Enable DHCP Server
-	•	Range: 192.168.30.10 to 192.168.30.100
+	•	Range: 192.168.30.10 to 192.168.30.50
 	•	VLAN 40:
 	•	Interface: VLAN 40
 	•	Enable DHCP Server
-	•	Range: 192.168.40.10 to 192.168.40.100
+	•	Range: 192.168.40.10 to 192.168.40.50
 	•	VLAN 50:
 	•	Interface: VLAN 50
 	•	Enable DHCP Server
-	•	Range: 192.168.50.10 to 192.168.50.100
+	•	Range: 192.168.50.10 to 192.168.50.50
 	3.	Save the changes.
 
 Configure Firewall Rules
 
 	1.	Navigate to Firewall > Rules.
 	2.	Select each VLAN interface and create rules as needed:
-	•	For basic connectivity within the VLAN, allow all traffic.
-	•	Create rules to allow or block traffic between VLANs based on your requirements.
+	•	For obtaining basic network connectivity do the following: 
+ 		**Action:** Pass
+   		**Disabled:** Uncheck this
+     		**Interface:** Select Proper VLAN (VLAN 10 / Management)
+       		**TCP/IP Version:** Select IPv4 (or IPv6 if you're using IPv6)
+	 	**Protocol:** I set mine to any
+		**Source:** Mangement net
+  		**Destination:** Leave blank to let all outbound access through
+    		**Destination port range:** I left it blank for all ports so I can have outbound network access.
+	•	Rinse and repeat the same rule set for all 5 VLANS. 
 
 Step 2: Configure VLANs on Netgear GS108E V3 Switch
 

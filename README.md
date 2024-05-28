@@ -1,76 +1,168 @@
-# home-network-vlan-setup
-## Overview
-This documentation highlights the steps that I took to setup VLANs on my home network to segment different types of devices for improved security and management. The setup will include a OPNsense router, a Netgear GS108E V3 managed switch, and a TP-Link Archer AX1500 router running in AP mode.
+Home Network VLAN Configuration Guide
 
-## Equipment
-  - **OPNSense Router**
-  - **Netgear GS108E V3 Managed Switch**
-  - **TP-Link Archer AX1500 Router running in AP mode since I don't own proper AP**
+This guide details the steps to segment a home network using VLANs with the following hardware setup:
 
-## Devices
-- **Desktop computer** connected to port 1 on the switch via ethernet
-- **HPE Proliant DL360P G8 Server running UNRAID OS**
--UNRAID connected to port 2 on the switch via ethernet
--iLO 4 connected to port 3 on the switch via ethernet
-- **Wireless Devices:**
-  -iPhone
-  -MacBook Air
-  -Amazon Echo Dot
+	•	Router: OPNsense
+	•	Switch: Netgear GS108E V3
+	•	Access Point: TP-Link Archer AX1500 (AP Mode)
+	•	Devices:
+	•	Windows 11 Desktop (Wired)
+	•	HPE Proliant DL360P G8 Server running UNRAID (Wired, with iLO)
+	•	M1 MacBook Air (Wireless)
+	•	iRobot Roomba (Wireless)
+	•	iPhone (Wireless)
+	•	Amazon Alexa (Wireless)
+	•	Smart TV (Wireless)
 
-## VLAN Configuration Plan
+VLAN Plan
 
-### VLANs to Create
-  - **VLAN 10:** Trusted Devices (Desktop, MacBook Air)
-  - **VLAN 20:** Servers (UNRAID, iLO 4)
-  - **VLAN 30:** IoT Devics (iPhone, Amazon Echo Dot)
+	1.	VLAN 10 - Management: iLO and OPNsense management interfaces.
+	2.	VLAN 20 - Servers: UNRAID server.
+	3.	VLAN 30 - Trusted Devices: Windows 11 desktop and personal devices.
+	4.	VLAN 40 - IoT Devices: iRobot Roomba, Smart TV, Amazon Alexa.
+	5.	VLAN 50 - Guest WiFi: Guest devices like iPhone and MacBook Air.
 
-## Step-by-Step Configuration
+Step-by-Step Configuration
 
-### 1. OPNSense Router Configuration
+Step 1: Configure VLANs on OPNsense
 
-**Create VLAN Interfaces:**
-  1. Log into OPNsense
-  2. Go to **Interfaces > Other Types > VLAN**
-  3. Click **ADD** to create VLANs:
-     - **VLAN 10:** Set Parent Interface to the interface connected to the switch (in my case `igb3`), VLAN Tag to 10
-     - **VLAN 20:** Set Parent Interface to the interface connected to the switch (in my case `igb3`), VLAN Tag to 20
-     - **VLAN 30:** Set Parent Interface to the interface connected to the switch (in my case `igb3`), VLAN Tag to 30
+Access OPNsense GUI
 
-  **Assign VLAN Interfaces:**
-    1. Go to **Interfaces > Assignments**.
-    2. Assign each VLAN to a new interface: 
-        - Enable each new interface by clicking on its name (in my case it was `opt1`), checking **Enable Interface**, and renaming it to the proper VLAN names (VLAN 10, VLAN 20, VLAN 30).
+	1.	Open a web browser and navigate to your OPNsense router’s IP address (default is usually 192.168.1.1).
+	2.	Log in with your admin username and password.
 
-  **Configure VLAN Interfaces:**
-    1. Go to **Interfaces > [VLAN10]**:
-      - Check **Enable Interface**
-      - Set **IPv4 Configuration Type** to **Static IPv4**
-      - Set IP address (I set it to 192.168.10.1/24 to keep everything the same)
-      - Enable **DHCP** and configure DHCP settings. 
-    2. Repeat the above steps for VLAN 20, 30, using IP ranges `192.168.20.1/24` and `192.168.30.1/24`
+Add VLANs
+
+	1.	Navigate to Interfaces > Other Types > VLAN.
+	2.	Click the + button to add a new VLAN.
+	3.	Create VLANs with the following details:
+
+VLAN ID	Description	Parent Interface
+10	Management	LAN
+20	Servers	LAN
+30	Trusted Devices	LAN
+40	IoT Devices	LAN
+50	Guest WiFi	LAN
 
 
-  **Firewall Rules:**
-    1. Go to **firewall > Rules**.
-    2. For each VLAN interface, create rules that would: 
-      - Allow intra-VLAN traffic
-      - Allow necessary inter-VLAN traffic. 
-      - Block or restrict traffic between VLANs
-    3. Example rule set for VLAN10 (Trusted Devices):
-        - Allow traffic from VLAN10 net to any (outbound).
-        - Block traffic from VLAN10 to VLAN20 and VLAN30 except for specific riles (allowing access to specific services if you need to)
 
-  ### 2. Netgear GS108E V3 Switch Configuration
+Assign Interfaces
 
-  **Access the Switch Configuration:**
-    1. Connect your PC to the switch and access the Web UI using its IP address (in my case, I had to factory reset it and set my computer to have a manual IP of `192.168.0.219` with subnet mask of `255.255.255.0`. in order to access the WebUI, you have to enter the ip address of `192.168.0.239`).
+	1.	Navigate to Interfaces > Assignments.
+	2.	You will see the newly created VLAN interfaces. Click the + button to assign each VLAN.
+	3.	Configure each VLAN interface:
+	•	Enable the interface.
+	•	IPv4 Configuration Type: Static IPv4
+	•	IP Address:
+	•	VLAN 10: 192.168.10.1/24
+	•	VLAN 20: 192.168.20.1/24
+	•	VLAN 30: 192.168.30.1/24
+	•	VLAN 40: 192.168.40.1/24
+	•	VLAN 50: 192.168.50.1/24
+	•	Save and apply changes.
 
-  **Create VLANS:**
-    1. Go to **Switching > VLAN > VLAN Configurations**.
-    2. Add VLAN 10, VLAN 20, and VLAN 30.
+Configure DHCP for VLANs
 
-  **Assign VLANs to Ports:**
-    1. Go to **Switching > VLAN > VLAN Membership**.
-    2. Configure ports: 
-      - **Port 1 (Desktop):** Untagged for VLAN 20 (Server) .
-      - **Port 2 (UNRAID):** Un
+	1.	Navigate to Services > DHCPv4.
+	2.	Create a DHCP scope for each VLAN:
+	•	VLAN 10:
+	•	Interface: VLAN 10
+	•	Enable DHCP Server
+	•	Range: 192.168.10.10 to 192.168.10.100
+	•	VLAN 20:
+	•	Interface: VLAN 20
+	•	Enable DHCP Server
+	•	Range: 192.168.20.10 to 192.168.20.100
+	•	VLAN 30:
+	•	Interface: VLAN 30
+	•	Enable DHCP Server
+	•	Range: 192.168.30.10 to 192.168.30.100
+	•	VLAN 40:
+	•	Interface: VLAN 40
+	•	Enable DHCP Server
+	•	Range: 192.168.40.10 to 192.168.40.100
+	•	VLAN 50:
+	•	Interface: VLAN 50
+	•	Enable DHCP Server
+	•	Range: 192.168.50.10 to 192.168.50.100
+	3.	Save the changes.
+
+Configure Firewall Rules
+
+	1.	Navigate to Firewall > Rules.
+	2.	Select each VLAN interface and create rules as needed:
+	•	For basic connectivity within the VLAN, allow all traffic.
+	•	Create rules to allow or block traffic between VLANs based on your requirements.
+
+Step 2: Configure VLANs on Netgear GS108E V3 Switch
+
+Access the Netgear Switch
+
+	1.	Download and install the Netgear ProSAFE Plus Configuration Utility from Netgear’s website.
+	2.	Open the utility and connect to your switch.
+
+Create VLANs
+
+	1.	Navigate to VLAN > 802.1Q > Advanced.
+	2.	Click Add VLAN.
+	3.	Create VLANs with the following details:
+
+VLAN ID	VLAN Name
+10	Management
+20	Servers
+30	Trusted Devices
+40	IoT Devices
+50	Guest WiFi
+
+
+
+Assign VLANs to Ports
+
+	1.	Navigate to VLAN > 802.1Q > VLAN Membership.
+	2.	Configure the ports for each VLAN:
+	•	VLAN 10:
+	•	Port 4 (Connected to OPNsense): Tagged
+	•	Port 1 (iLO): Untagged
+	•	VLAN 20:
+	•	Port 4 (Tagged), Port 2 (Untagged)
+	•	VLAN 30:
+	•	Port 4 (Tagged), Port 5 (Untagged)
+	•	VLAN 40:
+	•	Port 4 (Tagged), Port 3 (Untagged)
+	•	VLAN 50:
+	•	Port 4 (Tagged), Port 3 (Untagged)
+
+Set PVID for Untagged Ports
+
+	1.	Navigate to VLAN > PVID.
+	2.	Assign the PVID for each untagged port:
+	•	Port 1: PVID 10
+	•	Port 2: PVID 20
+	•	Port 5: PVID 30
+	•	Port 3: PVID 40 (IoT) or 50 (Guest)
+
+Step 3: Connect Devices
+
+Wired Devices
+
+	1.	Windows 11 Desktop: Connect to port 5.
+	2.	UNRAID server (main interface): Connect to port 2.
+	3.	iLO: Connect to port 1.
+
+Wireless Devices
+
+	1.	TP-Link Archer AX1500 (AP Mode): Connect to port 3 of the Netgear switch.
+	•	Note: The TP-Link router in AP mode cannot tag VLANs, so it will use the PVID assigned to port 3. Set the PVID to either VLAN 40 (IoT) or VLAN 50 (Guest) based on the primary use.
+
+Step 4: Verify Connectivity
+
+	1.	Check IP Assignments: Ensure each device receives an IP address from the correct VLAN DHCP scope.
+	2.	Test Connectivity: Verify network connectivity and inter-VLAN communication based on firewall rules.
+
+Summary
+
+	•	VLAN 10 (Management): iLO (Port 1), OPNsense management interface.
+	•	VLAN 20 (Servers): UNRAID (Port 2).
+	•	VLAN 30 (Trusted Devices): Windows 11 Desktop (Port 5).
+	•	VLAN 40 (IoT Devices): IoT devices via TP-Link AP (Port 3 PVID 40).
+	•	VLAN 50 (Guest WiFi): Guest devices via TP-Link AP (Port 3 PVID 50 when needed).

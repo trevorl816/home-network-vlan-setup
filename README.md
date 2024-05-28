@@ -37,10 +37,10 @@ Add VLANs
 	3.	I created the VLANs with the following details:
 
 VLAN ID	Description	Parent Interface
-10	Management	LAN (igb2 in my case)
-20	Servers		LAN
-30	Trusted Devices	LAN
-40	IoT Devices	LAN
+	10	Management	LAN (igb2 in my case)
+	20	Servers		LAN
+	30	Trusted Devices	LAN
+	40	IoT Devices	LAN
 
 
 

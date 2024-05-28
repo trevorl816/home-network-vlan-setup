@@ -20,11 +20,10 @@ VLAN Plan
 	2.	VLAN 20 - Servers: UNRAID server.
 	3.	VLAN 30 - Trusted Devices: Windows 11 desktop and personal devices.
 	4.	VLAN 40 - IoT Devices: iRobot Roomba, Smart TV, Amazon Alexa.
-	5.	VLAN 50 - Guest WiFi: Guest devices like iPhone and MacBook Air.
 
 Step-by-Step Configuration
 
-Step 1: Configure VLANs on OPNsense
+Step 1: Configure VLANs on OPNsense Firewall
 
 Access OPNsense GUI
 
@@ -35,14 +34,13 @@ Add VLANs
 
 	1.	Navigate to Interfaces > Other Types > VLAN.
 	2.	Click the + button to add a new VLAN.
-	3.	Create VLANs with the following details:
+	3.	I created the VLANs with the following details:
 
 VLAN ID	Description	Parent Interface
-10	Management	LAN
+10	Management	LAN (igb2 in my case)
 20	Servers		LAN
 30	Trusted Devices	LAN
 40	IoT Devices	LAN
-50	Guest WiFi	LAN
 
 
 
@@ -58,7 +56,6 @@ Assign Interfaces
 	•	VLAN 20: 192.168.20.1/24
 	•	VLAN 30: 192.168.30.1/24
 	•	VLAN 40: 192.168.40.1/24
-	•	VLAN 50: 192.168.50.1/24
 	•	Save and apply changes.
 
 Configure DHCP for VLANs
@@ -81,10 +78,6 @@ Configure DHCP for VLANs
 	•	Interface: VLAN 40
 	•	Enable DHCP Server
 	•	Range: 192.168.40.10 to 192.168.40.50
-	•	VLAN 50:
-	•	Interface: VLAN 50
-	•	Enable DHCP Server
-	•	Range: 192.168.50.10 to 192.168.50.50
 	3.	Save the changes.
 
 Configure Firewall Rules
@@ -106,8 +99,8 @@ Step 2: Configure VLANs on Netgear GS108E V3 Switch
 
 Access the Netgear Switch
 
-	1.	Download and install the Netgear ProSAFE Plus Configuration Utility from Netgear’s website.
-	2.	Open the utility and connect to your switch.
+	1.	I downloaded Netgears ProSafe Plus utility so I wouldn't have to deal with the WebGUI of the network Switch
+	2.	I then opened the utility and connect to my network switch.
 
 Create VLANs
 
@@ -120,7 +113,6 @@ VLAN ID	VLAN Name
 20	Servers
 30	Trusted Devices
 40	IoT Devices
-50	Guest WiFi
 
 
 
@@ -147,7 +139,7 @@ Set PVID for Untagged Ports
 	•	Port 1: PVID 10
 	•	Port 2: PVID 20
 	•	Port 5: PVID 30
-	•	Port 3: PVID 40 (IoT) or 50 (Guest)
+	•	Port 3: PVID 40 (IoT)
 
 Step 3: Connect Devices
 
@@ -160,11 +152,12 @@ Wired Devices
 Wireless Devices
 
 	1.	TP-Link Archer AX1500 (AP Mode): Connect to port 3 of the Netgear switch.
-	•	Note: The TP-Link router in AP mode cannot tag VLANs, so it will use the PVID assigned to port 3. Set the PVID to either VLAN 40 (IoT) or VLAN 50 (Guest) based on the primary use.
+	•	After trial and error, I found out that the TP-Link Archer AX1500 Router doesn't support vlan tagging for SSIDs, so I had grouped all of the wireless devices into one VLAN. 
 
 Step 4: Verify Connectivity
 
 	1.	Check IP Assignments: Ensure each device receives an IP address from the correct VLAN DHCP scope.
+ 	2. 	Check Connectivity: I made sure to verify that I had outbound access. To do this, I made sure that my desktop computer (Windows 11) could ping Google servers (8.8.8.8)
 	2.	Test Connectivity: Verify network connectivity and inter-VLAN communication based on firewall rules.
 
 Summary
@@ -173,4 +166,3 @@ Summary
 	•	VLAN 20 (Servers): UNRAID (Port 2).
 	•	VLAN 30 (Trusted Devices): Windows 11 Desktop (Port 5).
 	•	VLAN 40 (IoT Devices): IoT devices via TP-Link AP (Port 3 PVID 40).
-	•	VLAN 50 (Guest WiFi): Guest devices via TP-Link AP (Port 3 PVID 50 when needed).

@@ -1,6 +1,6 @@
 # Home Network VLAN Configuration Guide
 
-This guide details the steps to segment a home network using VLANs with the following hardware setup:
+This guide shows how you can setup VLANS for your home network with the following hardware:
 
 - **Router:** OPNsense
 - **Switch:** Netgear GS108E V3
@@ -42,7 +42,7 @@ This guide details the steps to segment a home network using VLANs with the foll
 | 40      | IoT Devices       | LAN              |
 
 #### Assign Interfaces
-1. Navigate to `Interfaces` > `Assignments`.
+1. I navigated to `Interfaces` > `Assignments`.
 2. Click the `+` button to assign VLANS.
 3. Configure each VLAN interface with the following settings:
    - **Enable the interface.**
@@ -55,7 +55,7 @@ This guide details the steps to segment a home network using VLANs with the foll
 4. Save and apply changes.
 
 #### Configure DHCP for VLANs
-1. Navigate to `Services` > `DHCPv4`.
+1. I navigated to `Services` > `DHCPv4`.
 2. Create a DHCP scope for each VLAN:
    - **VLAN 10:**
      - Interface: VLAN 10
@@ -76,7 +76,7 @@ This guide details the steps to segment a home network using VLANs with the foll
 3. Save the changes.
 
 #### Configure Firewall Rules
-1. Navigate to `Firewall` > `Rules`.
+1. I navigated to `Firewall` > `Rules`.
 2. Select each VLAN interface and create rules as needed:
    - For obtaining basic network connectivity, do the following: 
      - **Action:** Pass
@@ -86,7 +86,7 @@ This guide details the steps to segment a home network using VLANs with the foll
      - **Protocol:** Any
      - **Source:** Management net
      - **Destination:** Leave blank to allow all outbound access
-     - **Destination port range:** Leave blank for all ports to have outbound network access.
+     - **Destination port range:** Leave blank to have outbound network access.
    - Rinse and repeat the same rule set for all VLANs.
 
 ### Step 2: Configure VLANs on Netgear GS108E V3 Switch
@@ -137,12 +137,11 @@ This guide details the steps to segment a home network using VLANs with the foll
 
 #### Wireless Devices
 1. **TP-Link Archer AX1500 (AP Mode):** Connect to port 3 of the Netgear switch.
-   - Note: The TP-Link Archer AX1500 router in AP mode doesn't support VLAN tagging for SSIDs, so all wireless devices will be grouped into one VLAN.
+   - Note: Figuring out that the TP-Link Archer AX1500 Router doesn't support VLAN tagging for SSID's in AP mode, I had to group all the wireless devices into oone vlan named `IoT`.
 
 ### Step 4: Verify Connectivity
-1. **Check IP Assignments:** Ensure each device receives an IP address from the correct VLAN DHCP scope.
-2. **Test Connectivity:** Verify network connectivity and inter-VLAN communication based on firewall rules.
-3. **Ping Test:** Ensure that devices can ping external servers (e.g., Google DNS 8.8.8.8).
+1. **Check IP Assignments:** I made sure that each device got proper IP assignments (An example would be my desktop would get an IP address of 192.168.30.x from the proper VLAN)
+2. **Test Connectivity:** Made sure that all devices had outbound internet access. 
 
 ### Summary
 
@@ -150,4 +149,3 @@ This guide details the steps to segment a home network using VLANs with the foll
 - **VLAN 20 (Servers):** UNRAID (Port 2).
 - **VLAN 30 (Trusted Devices):** Windows 11 Desktop (Port 5).
 - **VLAN 40 (IoT Devices):** IoT devices via TP-Link AP (Port 3 PVID 40).
-- **VLAN 50 (Guest WiFi):** Guest devices via TP-Link AP (Port 3 PVID 50 when needed).
